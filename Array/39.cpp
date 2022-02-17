@@ -39,7 +39,33 @@ class Solution {
             }
         }
 
-        vector<vector<int>> combinationSum(vector<int>& candidates, int required_target)
+        void solve_backtracking(int i, vector<int>& arr, vector<int>& temp, int target)
+        {
+            //We have found an combination so include it to our
+            //answers vector and return.
+            if (target == 0)
+            {
+                ans.push_back(temp);
+                return;
+            }
+            
+            //If the target is less than zero than there is not any possibly combination
+            //Or if we have checked every possible combination than return.
+            if (target < 0 || i == arr.size()) return;
+
+            //There is know to choice either addid the current element to the
+            //combination of out answers or not.
+            
+            //Move to the next element without using the current element.
+            solve_backtracking(i + 1, arr, temp, target);
+
+            //Move to the next element but using the current element.
+            temp.push_back(arr[i]);
+            solve_backtracking(i, arr, temp, target - arr[i]);
+            temp.pop_back();
+        }
+
+        vector<vector<int>> combinationSum_recursion(vector<int>& candidates, int required_target)
         {
             ans.clear();
 
@@ -48,6 +74,17 @@ class Solution {
             sort(candidates.begin(), candidates.end());
             solve_recursion(candidates, 0, 0, op);
 
+            return ans;
+        }
+
+        vector<vector<int>> combinationSum_backtracking(vector<int>& candidates, int required_target)
+        {
+            ans.clear();
+
+            vector<int> temp;
+
+            solve_backtracking(0, candidates, temp, target);
+            
             return ans;
         }
 };
